@@ -18,11 +18,12 @@ Supports BAUD RATE From 300 To 1000000 BAUD. All 3 USART Peripherals i.e USART1,
 11. UART_SendString
 12. UART_ReadChar
 13. UART_ReadString
+14. UART_Printf
 
 # API Usage:
 1. UART_Init(*UARTx*, *UARTx_USE_GPIOy*, *UART_BAURDRATE*);
 2. UART_SendChar(*UARTx*, *character*);
 3. UART_SendString(*UARTx*, *string*);
 4. UART_ReadChar(*UARTx*);
-5. UART_ReadString(*UARTx*, *buffer*);
-**Make Sure To Have A Large Enough Buffer To Store Data For UART_ReadString()**
+5. UART_ReadString(*UARTx*, *buffer*);**Make Sure To Have A Large Enough Buffer To Store Data For UART_ReadString()**
+6. UART_Printf(*UARTx*, *string*, *parameters*); **Supports: %c, %d, %s, %x, %o**
