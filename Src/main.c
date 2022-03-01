@@ -6,7 +6,7 @@ int main(void)
 
 	UART_SendString(UART6, "\nSTARTING STRING WRITE\n");
 
-	UART_Printf(UART6, "UART = %d | CHARACTER: %c | STRING: %s | HEX: 0x%x\n", 6, 'H', "Hello!!", 55);
+	UART_Printf(UART6, "INTEGER: %d | CHARACTER: %c | STRING: %s | HEX: 0x%x | FLOAT: %f | TRUNCATED FLOAT: %.2f\n", 6, 'H', "Hello!!", 55, 3.141592, 3.141592);
 
 	UART_SendString(UART6, "\nSTRING WRITE FINISHED\n");
 

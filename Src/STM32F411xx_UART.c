@@ -5,6 +5,7 @@
  * Author: Devashish Lahariya
 */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -182,10 +183,62 @@ static char* convert(unsigned int num, int base)
     return(ptr);
 }
 
+static void reverse(char* str, int len)
+{
+    int i = 0, j = len - 1, temp;
+
+    while(i < j)
+    {
+        temp = str[i];
+        str[i] = str[j];
+        str[j] = temp;
+        i++;
+        j--;
+    }
+}
+
+static int intToStr(int x, char str[], int d)
+{
+    int i = 0;
+    while(x)
+    {
+        str[i++] = (x % 10) + '0';
+        x = x / 10;
+    }
+
+    while(i < d)
+        str[i++] = '0';
+
+    reverse(str, i);
+    str[i] = '\0';
+
+    return i;
+}
+
+static void ftoa(float n, char* res, int afterpoint)
+{
+    int ipart = (int)n;
+
+    float fpart = n - (float)ipart;
+
+    int i = intToStr(ipart, res, 0);
+
+    if(afterpoint != 0)
+    {
+        res[i] = '.';
+
+        fpart = fpart * pow(10, afterpoint);
+
+        intToStr((int)fpart, res + i + 1, afterpoint);
+    }
+}
+
 void UART_Printf(USART_PERIPHERALS_t* UART, char* format, ...)
 {
+	char floatArr[20];
     char* traverse;
     unsigned int i;
+    double f;
     char* s;
 
     int len = strlen(format);
@@ -208,30 +261,53 @@ void UART_Printf(USART_PERIPHERALS_t* UART, char* format, ...)
 
         switch(*traverse)
         {
-            case 'c': i = va_arg(arg, int);
-                        UART_SendChar(UART, i);
-                        break;
+            case 'c':
+            	i = va_arg(arg, int);
+                UART_SendChar(UART, i);
+                break;
 
-            case 'd': i = va_arg(arg, int);
-                        if(i < 0)
-                        {
-                            i = -i;
-                            UART_SendChar(UART, '-');
-                        }
-                        UART_SendString(UART, convert(i, 10));
-                        break;
+            case 'd':
+            	i = va_arg(arg, int);
 
-            case 'o': i = va_arg(arg, unsigned int);
-            			UART_SendString(UART, convert(i, 8));
-            			break;
+            	if(i < 0)
+                {
+                    i = -i;
+                    UART_SendChar(UART, '-');
+                }
+                UART_SendString(UART, convert(i, 10));
+                break;
 
-            case 's': s = va_arg(arg, char*);
-                        UART_SendString(UART, s);
-                        break;
+            case 'o':
+            	i = va_arg(arg, unsigned int);
+            	UART_SendString(UART, convert(i, 8));
+            	break;
 
-            case 'x': i = va_arg(arg, unsigned int);
-                        UART_SendString(UART, convert(i, 16));
-                        break;
+            case 's':
+            	s = va_arg(arg, char*);
+                UART_SendString(UART, s);
+                break;
+
+            case 'x':
+            	i = va_arg(arg, unsigned int);
+                UART_SendString(UART, convert(i, 16));
+                break;
+
+            case 'f':
+            	f = va_arg(arg, double);
+            	ftoa(f, floatArr, 6);
+            	UART_SendString(UART, floatArr);
+            	break;
+
+            case '.':
+            	f = va_arg(arg, double);
+            	traverse++;
+
+            	uint8_t value = *traverse - '0';
+
+            	traverse++;
+            	ftoa(f, floatArr, value);
+            	UART_SendString(UART, floatArr);
+            	break;
         }
     }
     va_end(arg);
