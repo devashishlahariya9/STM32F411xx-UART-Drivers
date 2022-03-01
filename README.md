@@ -2,7 +2,7 @@
 UART Bare Metal Drivers for STM32F4 Family of Microcontrollers. The Driver contains APIs for the user to Send & Receive Data via UART.
 Supports BAUD RATE From 300 To 1000000 BAUD. All 3 USART Peripherals i.e USART1, USART2 & USART6 Are Available To Use.
 
-*NOTE: On The STM32F411E-DISCO Board The USART1 Can't Use GPIOA Pins (Although This Functionality Has Still Been Provided)*
+**NOTE: On The STM32F411E-DISCO Board The USART1 Can't Use GPIOA Pins (Although This Functionality Has Still Been Provided)**
 
 # Keywords:
 1. UARTx => x = (1, 2, 6)
@@ -26,4 +26,4 @@ Supports BAUD RATE From 300 To 1000000 BAUD. All 3 USART Peripherals i.e USART1,
 3. UART_SendString(*UARTx*, *string*);
 4. UART_ReadChar(*UARTx*);
 5. UART_ReadString(*UARTx*, *buffer*);**Make Sure To Have A Large Enough Buffer To Store Data For UART_ReadString()**
-6. UART_Printf(*UARTx*, *string*, *parameters*); **Supports: %c, %d, %s, %x, %o**
+6. UART_Printf(*UARTx*, *string*, *parameters*); **Supports: %c, %d, %s, %x, %o, %f**
